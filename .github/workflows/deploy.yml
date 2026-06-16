@@ -31,11 +31,11 @@ jobs:
             set -e
             cd /opt/motor-biker-backend
 
-            sudo lsof -t -i:3000 | xargs -r sudo kill -9 || true
+            lsof -t -i:3000 | xargs -r kill -9 || true
 
             printf "%s" "${{ secrets.ENV_FILE }}" > .env
 
-            npm install
+            npm install --legacy-peer-deps
             npm run build
 
             pm2 stop motor-biker-api || true
