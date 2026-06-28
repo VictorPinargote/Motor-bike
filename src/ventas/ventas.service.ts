@@ -16,7 +16,7 @@ export class VentasService {
 
   async create(dto: CreateVentaDto): Promise<Venta | null> {
     try {
-      const venta = this.repository.create(dto);
+      const venta = this.repository.create({ ...dto, fecha_venta: new Date() });
       return await this.repository.save(venta);
     } catch (err) {
       console.error('Error creating venta:', err);

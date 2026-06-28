@@ -1,7 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from './user-role.enum';
-import { IsOptional } from 'class-validator';
-
 
 @Entity('users')
 export class User {

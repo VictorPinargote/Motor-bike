@@ -26,6 +26,7 @@ export class VentasController {
     return new SuccessResponseDto('Venta created successfully', venta);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(
     @Query() query: QueryDto,
@@ -41,6 +42,7 @@ export class VentasController {
     return new SuccessResponseDto('Ventas retrieved successfully', result);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const venta = await this.service.findOne(id);
