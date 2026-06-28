@@ -16,6 +16,7 @@ import {
   Req,
   ForbiddenException,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -41,10 +42,13 @@ interface AuthenticatedRequest {
   };
 }
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Crear un usuario' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Post()
@@ -57,6 +61,15 @@ export class UsersController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listar usuarios' })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'searchField', required: false })
+  @ApiQuery({ name: 'sort', required: false })
+  @ApiQuery({ name: 'order', required: false })
+  @ApiQuery({ name: 'isActive', required: false })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Get()
@@ -89,6 +102,8 @@ export class UsersController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener un usuario por id' })
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
@@ -104,6 +119,8 @@ export class UsersController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Eliminar un usuario' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')
@@ -116,6 +133,9 @@ export class UsersController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Subir imagen de perfil' })
+  @ApiConsumes('multipart/form-data')
   @UseGuards(JwtAuthGuard)
   @Put('profile/:id')
   @UseInterceptors(
@@ -157,6 +177,8 @@ export class UsersController {
     );
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar un usuario' })
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(

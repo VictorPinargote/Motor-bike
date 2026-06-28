@@ -22,12 +22,26 @@ export class ComentariosService {
     }
   }
 
-  async findAll(options: { page: number; limit: number }): Promise<any | null> {
+  async findAll(options: {
+    page: number;
+    limit: number;
+    search?: string;
+  }): Promise<any | null> {
     try {
-      const { page, limit } = options;
+      const { page, limit, search } = options;
+
+      const filter = search
+        ? {
+            $or: [
+              { userId: { $regex: search, $options: 'i' } },
+              { motoId: { $regex: search, $options: 'i' } },
+              { contenido: { $regex: search, $options: 'i' } },
+            ],
+          }
+        : {};
 
       const comentarios = await this.comentarioModel
-        .find()
+        .find(filter)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ fecha: -1 });
