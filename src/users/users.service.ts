@@ -19,6 +19,21 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  sanitizeUser(user: User): Omit<User, 'password'> {
+    const safeUser = { ...user };
+    delete (safeUser as Partial<User>).password;
+    return safeUser;
+  }
+
+  sanitizeUsersPagination(
+    pagination: Pagination<User>,
+  ): Pagination<Omit<User, 'password'>> {
+    return {
+      ...pagination,
+      items: pagination.items.map((user) => this.sanitizeUser(user)),
+    };
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User | null> {
     try {
       const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -43,10 +58,9 @@ export class UsersService {
 
       const query = this.userRepository.createQueryBuilder('user');
 
-      /*
       if (isActive !== undefined) {
         query.andWhere('user.isActive = :isActive', { isActive });
-      }*/
+      }
 
       if (search) {
         if (searchField) {
@@ -78,7 +92,17 @@ export class UsersService {
       }
 
       if (sort) {
-        query.orderBy(`user.${sort}`, (order ?? 'ASC') as 'ASC' | 'DESC');
+        const validFields = [
+          'username',
+          'email',
+          'nombre',
+          'apellido',
+          'role',
+          'isActive',
+        ];
+        const sortField = validFields.includes(sort) ? sort : 'username';
+        const sortOrder = order === 'ASC' || order === 'DESC' ? order : 'ASC';
+        query.orderBy(`user.${sortField}`, sortOrder);
       }
 
       return await paginate<User>(query, { page, limit });
