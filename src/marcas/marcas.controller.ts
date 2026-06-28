@@ -1,8 +1,9 @@
 import {
-  Controller, Get, Post, Put, Delete,
+  Controller, Get, Post, Patch, Delete,
   Param, Body, Query, NotFoundException, InternalServerErrorException,
   UseGuards
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { MarcasService } from './marcas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -14,10 +15,13 @@ import { Marca } from './marca.entity';
 import { SuccessResponseDto } from 'src/common/dto/response.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
 
+@ApiTags('Marcas')
 @Controller('marcas')
 export class MarcasController {
   constructor(private readonly service: MarcasService) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Crear una nueva marca (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Post()
@@ -27,6 +31,7 @@ export class MarcasController {
     return new SuccessResponseDto('Marca created successfully', marca);
   }
 
+  @ApiOperation({ summary: 'Obtener todas las marcas con paginación y búsqueda' })
   @Get()
   async findAll(
     @Query() query: QueryDto,
@@ -42,6 +47,7 @@ export class MarcasController {
     return new SuccessResponseDto('Marcas retrieved successfully', result);
   }
 
+  @ApiOperation({ summary: 'Obtener una marca por ID' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const marca = await this.service.findOne(id);
@@ -49,15 +55,19 @@ export class MarcasController {
     return new SuccessResponseDto('Marca retrieved successfully', marca);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar una marca (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  @Put(':id')
+  @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateMarcaDto) {
     const marca = await this.service.update(id, dto);
     if (!marca) throw new NotFoundException('Marca not found');
     return new SuccessResponseDto('Marca updated successfully', marca);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Eliminar una marca (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')

@@ -1,8 +1,9 @@
 import {
-  Controller, Get, Post, Put, Delete,
+  Controller, Get, Post, Patch, Delete,
   Param, Body, Query, NotFoundException, InternalServerErrorException,
   UseGuards
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { TipoMotorService } from './tipo-motor.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -14,10 +15,13 @@ import { TipoMotor } from './tipo-motor.entity';
 import { SuccessResponseDto } from 'src/common/dto/response.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
 
+@ApiTags('Tipo Motor')
 @Controller('tipo-motor')
 export class TipoMotorController {
   constructor(private readonly service: TipoMotorService) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Crear un nuevo tipo de motor (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Post()
@@ -27,6 +31,7 @@ export class TipoMotorController {
     return new SuccessResponseDto('Tipo de motor created successfully', tipoMotor);
   }
 
+  @ApiOperation({ summary: 'Obtener todos los tipos de motor con paginación y búsqueda' })
   @Get()
   async findAll(
     @Query() query: QueryDto,
@@ -42,6 +47,7 @@ export class TipoMotorController {
     return new SuccessResponseDto('Tipos de motor retrieved successfully', result);
   }
 
+  @ApiOperation({ summary: 'Obtener un tipo de motor por ID' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const tipoMotor = await this.service.findOne(id);
@@ -49,15 +55,19 @@ export class TipoMotorController {
     return new SuccessResponseDto('Tipo de motor retrieved successfully', tipoMotor);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar un tipo de motor (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  @Put(':id')
+  @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateTipoMotorDto) {
     const tipoMotor = await this.service.update(id, dto);
     if (!tipoMotor) throw new NotFoundException('Tipo de motor not found');
     return new SuccessResponseDto('Tipo de motor updated successfully', tipoMotor);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Eliminar un tipo de motor (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')
