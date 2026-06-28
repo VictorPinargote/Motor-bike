@@ -1,4 +1,12 @@
-import { IsOptional, IsNumber, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class UpdateMotoDto {
   @IsOptional()
@@ -6,35 +14,40 @@ export class UpdateMotoDto {
   modelo?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   marca_id?: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(1900)
+  @Max(2100)
   anio?: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(1)
   cilindraje?: number;
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   precio?: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(0)
   stock?: number;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   categoria_id?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   tipo_motor_id?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   estado_id?: string;
 
   @IsOptional()

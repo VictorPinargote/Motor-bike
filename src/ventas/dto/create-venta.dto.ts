@@ -1,16 +1,26 @@
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsIn } from 'class-validator';
+import {
+  IsIn,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 
 export class CreateVentaDto {
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   usuario_id: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsUUID()
   moto_id: string;
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(0)
   precio_venta: number;
 
   @IsNotEmpty()
@@ -19,7 +29,8 @@ export class CreateVentaDto {
   metodo_pago: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(1)
   cuotas?: number;
 
   @IsNotEmpty()

@@ -1,15 +1,21 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateReservaDto {
-  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
   usuario_id: string;
 
-  @IsString()
+  @IsNotEmpty()
+  @IsUUID()
   moto_id: string;
 
   @IsNotEmpty()
+  @Type(() => Date)
+  @IsDate()
   fecha_reserva: Date;
 
+  @IsNotEmpty()
   @IsString()
   estado: string;
 }

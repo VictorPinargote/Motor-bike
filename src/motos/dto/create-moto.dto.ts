@@ -1,4 +1,13 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class CreateMotoDto {
   @IsNotEmpty()
@@ -6,35 +15,40 @@ export class CreateMotoDto {
   modelo: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   marca_id?: string;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(1900)
+  @Max(2100)
   anio?: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
+  @Min(1)
   cilindraje?: number;
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(0)
   precio: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
+  @Min(0)
   stock: number;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   categoria_id?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   tipo_motor_id?: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   estado_id?: string;
 
   @IsOptional()

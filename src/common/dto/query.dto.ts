@@ -1,15 +1,18 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class QueryDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @IsOptional()
   page: number = 1;
 
   @Type(() => Number)
   @IsInt()
   @Min(1)
+  @Max(100)
+  @IsOptional()
   limit: number = 10;
 
   @IsOptional()
@@ -25,6 +28,6 @@ export class QueryDto {
   sort?: string;
 
   @IsOptional()
-  @IsString()
+  @IsIn(['ASC', 'DESC'])
   order?: 'ASC' | 'DESC';
 }

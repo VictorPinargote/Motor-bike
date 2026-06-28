@@ -6,5 +6,6 @@ export class UpdateCategoriesDto {
   nombre?: string;
 
   @IsOptional()
+  @IsString()
   descripcion?: string;
 }
