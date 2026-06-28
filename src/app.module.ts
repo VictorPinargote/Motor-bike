@@ -19,18 +19,29 @@ import { MensajesModule } from './mensajes/mensajes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI || ''),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      //ssl: { rejectUnauthorized: false },
+    
+    // Configuración Asíncrona para Mongoose
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.MONGO_URI,
+      }),
     }),
+    
+    // Configuración Asíncrona para TypeORM
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT || '5432', 10),
+        username: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+        //ssl: { rejectUnauthorized: false },
+      }),
+    }),
+    
     AuthModule,
     UsersModule,
     CategoriesModule,
