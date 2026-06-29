@@ -11,7 +11,7 @@ export class CreateMantenimientoDto {
 
   @IsNotEmpty()
   @IsDateString()
-  fecha: Date;
+  fecha: string;
 
   @IsNotEmpty()
   @IsString()
