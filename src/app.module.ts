@@ -15,6 +15,8 @@ import { TipoMotorModule } from './tipo-motor/tipo-motor.module';
 import { EstadoMotoModule } from './estado-moto/estado-moto.module';
 import { ComentariosModule } from './comentarios/comentarios.module';
 import { MensajesModule } from './mensajes/mensajes.module';
+import { PagosModule } from './pagos/pagos.module';
+import { ImagenesModule } from './imagenes/imagenes.module';
 
 @Module({
   imports: [
@@ -53,6 +55,8 @@ import { MensajesModule } from './mensajes/mensajes.module';
     EstadoMotoModule,
     ComentariosModule,
     MensajesModule,
+    PagosModule,
+    ImagenesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
