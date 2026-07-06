@@ -72,3 +72,22 @@ Reservas
 Comentarios (reseñas ligadas a una moto)
 
 Mensajes
+
+## 5. Pruebas unitarias
+
+El proyecto usa Jest y las herramientas de testing de NestJS (`@nestjs/testing`). Los servicios se prueban mockeando el `Repository` de TypeORM (o el `Model` de Mongoose en Comentarios/Mensajes) y los controladores mockeando su respectivo servicio; no se usa una base de datos real.
+
+### Ejecutar todas las pruebas
+npm test
+
+### Ejecutar un módulo específico
+npx jest src/auth
+npx jest src/pagos
+
+### Generar el reporte de cobertura
+npm run test:cov
+
+Esto genera la carpeta `coverage/`. Para ver el reporte visual en el navegador, abrir `coverage/lcov-report/index.html`.
+
+### Cobertura actual
+84.5% de statements (mínimo requerido: 70%).

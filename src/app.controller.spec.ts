@@ -15,8 +15,11 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('debe retornar el estado de salud del servicio', () => {
+      expect(appController.getHello()).toEqual({
+        service: 'posts-api service',
+        message: 'Online',
+      });
     });
   });
 });
