@@ -21,7 +21,16 @@ import { User } from '../users/user.entity';
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         secret: config.get('JWT_SECRET'),
+<<<<<<< Updated upstream
         signOptions: { expiresIn: config.get('JWT_EXPIRATION') },
+=======
+        signOptions: {
+          expiresIn:
+            config.get('JWT_EXPIRES_IN') ??
+            config.get('JWT_EXPIRATION') ??
+            '1d',
+        },
+>>>>>>> Stashed changes
       }),
       inject: [ConfigService],
     }),
