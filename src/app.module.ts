@@ -17,6 +17,8 @@ import { ComentariosModule } from './comentarios/comentarios.module';
 import { MensajesModule } from './mensajes/mensajes.module';
 import { MantenimientosModule } from './mantenimientos/mantenimientos.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
+import { ColoresModule } from './colores/colores.module';
+import { ProveedoresModule } from './proveedores/proveedores.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { NotificacionesModule } from './notificaciones/notificaciones.module';
     MensajesModule,
     MantenimientosModule,
     NotificacionesModule,
+    ColoresModule,
+    ProveedoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
