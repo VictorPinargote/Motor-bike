@@ -21,12 +21,10 @@ export class ReservasController {
   constructor(private readonly service: ReservasService) {}
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Crear una nueva reserva (ADMIN)' })
+  @ApiOperation({ summary: 'Crear una nueva reserva (cualquier usuario logueado)' })
   @ApiResponse({ status: 201, description: 'Reserva creada exitosamente' })
   @ApiResponse({ status: 401, description: 'No autorizado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado' })
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() dto: CreateReservaDto) {
     const reserva = await this.service.create(dto);
