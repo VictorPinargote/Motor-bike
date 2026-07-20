@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -50,6 +51,14 @@ export class CreateMotoDto {
   @IsOptional()
   @IsUUID()
   estado_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  color_id?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  activo?: boolean;
 
   @IsOptional()
   @IsString()

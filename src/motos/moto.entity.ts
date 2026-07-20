@@ -33,5 +33,11 @@ export class Moto {
   estado_id: string;
 
   @Column({ nullable: true })
+  color_id: string;
+
+  @Column({ default: true })
+  activo: boolean;
+
+  @Column({ nullable: true })
   imagen_url: string;
 }

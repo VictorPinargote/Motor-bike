@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsInt,
   IsNumber,
   IsOptional,
@@ -49,6 +50,14 @@ export class UpdateMotoDto {
   @IsOptional()
   @IsUUID()
   estado_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  color_id?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  activo?: boolean;
 
   @IsOptional()
   @IsString()
