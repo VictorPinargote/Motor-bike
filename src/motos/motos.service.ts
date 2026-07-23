@@ -28,7 +28,12 @@ export class MotosService {
     try {
       const { page, limit, search, searchField, sort, order } = queryDto;
 
-      const query = this.repository.createQueryBuilder('moto');
+      const query = this.repository
+        .createQueryBuilder('moto')
+        .leftJoinAndSelect('moto.marca', 'marca')
+        .leftJoinAndSelect('moto.categoria', 'categoria')
+        .leftJoinAndSelect('moto.tipoMotor', 'tipoMotor')
+        .leftJoinAndSelect('moto.estado', 'estado');
 
       if (search) {
         if (searchField) {
@@ -51,7 +56,9 @@ export class MotosService {
         query.orderBy(`moto.${sortField}`, sortOrder);
       }
 
-      return await paginate<Moto>(query, { page, limit });
+      const result = await paginate<Moto>(query, { page, limit });
+      result.items.forEach((moto) => this.withCatalogNames(moto));
+      return result;
     } catch (err) {
       console.error('Error fetching motos:', err);
       return null;
@@ -59,18 +66,30 @@ export class MotosService {
   }
 
   async findOne(id: string): Promise<Moto | null> {
-    return await this.repository.findOne({ where: { id } });
+    const moto = await this.repository.findOne({
+      where: { id },
+      relations: ['marca', 'categoria', 'tipoMotor', 'estado'],
+    });
+    return moto ? this.withCatalogNames(moto) : null;
+  }
+
+  private withCatalogNames(moto: Moto): Moto {
+    moto.marca_nombre = moto.marca?.nombre;
+    moto.categoria_nombre = moto.categoria?.nombre;
+    moto.tipo_motor_nombre = moto.tipoMotor?.nombre;
+    moto.estado_nombre = moto.estado?.nombre;
+    return moto;
   }
 
   async update(id: string, dto: UpdateMotoDto): Promise<Moto | null> {
-    const entity = await this.findOne(id);
+    const entity = await this.repository.findOne({ where: { id } });
     if (!entity) return null;
     Object.assign(entity, dto);
     return await this.repository.save(entity);
   }
 
   async remove(id: string): Promise<Moto | null> {
-    const entity = await this.findOne(id);
+    const entity = await this.repository.findOne({ where: { id } });
     if (!entity) return null;
     return await this.repository.remove(entity);
   }

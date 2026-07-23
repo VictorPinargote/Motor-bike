@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Put, Delete,
+  Controller, Get, Post, Patch, Delete,
   Body, Param, Query, NotFoundException,
   InternalServerErrorException, UseGuards
 } from '@nestjs/common';
@@ -51,7 +51,7 @@ export class MotosController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  @Put(':id')
+  @Patch(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateMotoDto) {
     const moto = await this.service.update(id, dto);
     if (!moto) throw new NotFoundException('Moto not found');

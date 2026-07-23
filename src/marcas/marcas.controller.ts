@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Patch, Delete,
+  Controller, Get, Post, Put, Delete,
   Param, Body, Query, NotFoundException, InternalServerErrorException,
   UseGuards
 } from '@nestjs/common';
@@ -59,7 +59,7 @@ export class MarcasController {
   @ApiOperation({ summary: 'Actualizar una marca (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateMarcaDto) {
     const marca = await this.service.update(id, dto);
     if (!marca) throw new NotFoundException('Marca not found');

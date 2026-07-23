@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Patch, Delete,
+  Controller, Get, Post, Put, Delete,
   Param, Body, Query, NotFoundException, InternalServerErrorException,
   UseGuards
 } from '@nestjs/common';
@@ -59,7 +59,7 @@ export class TipoMotorController {
   @ApiOperation({ summary: 'Actualizar un tipo de motor (Solo ADMIN)' })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateTipoMotorDto) {
     const tipoMotor = await this.service.update(id, dto);
     if (!tipoMotor) throw new NotFoundException('Tipo de motor not found');
