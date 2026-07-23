@@ -17,6 +17,8 @@ import { ComentariosModule } from './comentarios/comentarios.module';
 import { MensajesModule } from './mensajes/mensajes.module';
 import { GarantiasModule } from './garantias/garantias.module';
 import { DescuentosModule } from './descuentos/descuentos.module';
+import { ColoresModule } from './colores/colores.module';
+import { ProveedoresModule } from './proveedores/proveedores.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { DescuentosModule } from './descuentos/descuentos.module';
     MensajesModule,
     GarantiasModule,
     DescuentosModule,
+    ColoresModule,
+    ProveedoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
