@@ -19,6 +19,7 @@ import { MantenimientosModule } from './mantenimientos/mantenimientos.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
 import { ColoresModule } from './colores/colores.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
+import { CarritoModule } from './carrito/carrito.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { ProveedoresModule } from './proveedores/proveedores.module';
     NotificacionesModule,
     ColoresModule,
     ProveedoresModule,
+    CarritoModule,
   ],
   controllers: [AppController],
   providers: [AppService],

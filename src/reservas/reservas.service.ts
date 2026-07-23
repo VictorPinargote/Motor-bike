@@ -6,18 +6,34 @@ import { Reserva } from './reserva.entity';
 import { CreateReservaDto } from './dto/create-reserva.dto';
 import { UpdateReservaDto } from './dto/update-reserva.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
+import { Carrito } from '../carrito/carrito.entity';
 
 @Injectable()
 export class ReservasService {
   constructor(
     @InjectRepository(Reserva)
     private readonly repository: Repository<Reserva>,
+    @InjectRepository(Carrito)
+    private readonly carritoRepository: Repository<Carrito>,
   ) {}
 
   async create(dto: CreateReservaDto): Promise<Reserva | null> {
     try {
       const reserva = this.repository.create(dto);
-      return await this.repository.save(reserva);
+      const saved = await this.repository.save(reserva);
+      if (saved && saved.estado === 'confirmada') {
+        const existing = await this.carritoRepository.findOne({
+          where: { usuario_id: saved.usuario_id, moto_id: saved.moto_id },
+        });
+        if (!existing) {
+          const item = this.carritoRepository.create({
+            usuario_id: saved.usuario_id,
+            moto_id: saved.moto_id,
+          });
+          await this.carritoRepository.save(item);
+        }
+      }
+      return saved;
     } catch (err) {
       console.error('Error creating reserva:', err);
       return null;
@@ -84,7 +100,26 @@ export class ReservasService {
     const entity = await this.findOne(id);
     if (!entity) return null;
     Object.assign(entity, dto);
-    return this.repository.save(entity);
+    const updated = await this.repository.save(entity);
+
+    if (updated && updated.estado === 'confirmada') {
+      const existing = await this.carritoRepository.findOne({
+        where: { usuario_id: updated.usuario_id, moto_id: updated.moto_id },
+      });
+      if (!existing) {
+        const item = this.carritoRepository.create({
+          usuario_id: updated.usuario_id,
+          moto_id: updated.moto_id,
+        });
+        await this.carritoRepository.save(item);
+      }
+    } else if (updated && (updated.estado === 'cancelada' || updated.estado === 'pendiente')) {
+      await this.carritoRepository.delete({
+        usuario_id: updated.usuario_id,
+        moto_id: updated.moto_id,
+      });
+    }
+    return updated;
   }
 
   async remove(id: string) {
