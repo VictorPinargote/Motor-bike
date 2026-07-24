@@ -15,6 +15,8 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173', // Vite
       'http://localhost:3000', // si tu front usa este
+      'https://motor-biker.uaeftt-ute.site', // frontend real (dominio del profe)
+      'https://motorbiker-frontend.northcentralus.cloudapp.azure.com', // frontend, dominio default de Azure
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
