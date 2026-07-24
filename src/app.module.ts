@@ -22,6 +22,8 @@ import { DescuentosModule } from './descuentos/descuentos.module';
 import { ColoresModule } from './colores/colores.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
 import { CarritoModule } from './carrito/carrito.module';
+import { PagosModule } from './pagos/pagos.module';
+import { ImagenesModule } from './imagenes/imagenes.module';
 
 @Module({
   imports: [
@@ -67,6 +69,8 @@ import { CarritoModule } from './carrito/carrito.module';
     ColoresModule,
     ProveedoresModule,
     CarritoModule,
+    PagosModule,
+    ImagenesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
