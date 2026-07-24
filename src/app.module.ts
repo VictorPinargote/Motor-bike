@@ -21,6 +21,7 @@ import { GarantiasModule } from './garantias/garantias.module';
 import { DescuentosModule } from './descuentos/descuentos.module';
 import { ColoresModule } from './colores/colores.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
+import { CarritoModule } from './carrito/carrito.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { ProveedoresModule } from './proveedores/proveedores.module';
     DescuentosModule,
     ColoresModule,
     ProveedoresModule,
+    CarritoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
