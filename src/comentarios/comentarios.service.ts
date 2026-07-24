@@ -26,19 +26,22 @@ export class ComentariosService {
     page: number;
     limit: number;
     search?: string;
+    motoId?: string;
   }): Promise<any | null> {
     try {
-      const { page, limit, search } = options;
+      const { page, limit, search, motoId } = options;
 
-      const filter = search
-        ? {
-            $or: [
-              { userId: { $regex: search, $options: 'i' } },
-              { motoId: { $regex: search, $options: 'i' } },
-              { contenido: { $regex: search, $options: 'i' } },
-            ],
-          }
-        : {};
+      const filter: Record<string, unknown> = motoId
+        ? { motoId }
+        : search
+          ? {
+              $or: [
+                { userId: { $regex: search, $options: 'i' } },
+                { motoId: { $regex: search, $options: 'i' } },
+                { contenido: { $regex: search, $options: 'i' } },
+              ],
+            }
+          : {};
 
       const comentarios = await this.comentarioModel
         .find(filter)

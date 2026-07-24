@@ -41,13 +41,15 @@ export class ComentariosController {
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'search', required: false })
+  @ApiQuery({ name: 'motoId', required: false })
   @Get()
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('search') search?: string,
+    @Query('motoId') motoId?: string,
   ) {
-    const result = await this.comentariosService.findAll({ page, limit, search });
+    const result = await this.comentariosService.findAll({ page, limit, search, motoId });
     if (!result) {
       throw new InternalServerErrorException('Could not retrieve comments');
     }
