@@ -2,10 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { UserRole } from './user-role.enum';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let service: jest.Mocked<UsersService>;
+  const adminReq = { user: { id: 'admin-1', role: UserRole.ADMIN } } as any;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +22,8 @@ describe('UsersController', () => {
             update: jest.fn(),
             remove: jest.fn(),
             updateProfile: jest.fn(),
+            sanitizeUser: jest.fn((user) => user),
+            sanitizeUsersPagination: jest.fn((pagination) => pagination),
           },
         },
       ],
@@ -84,7 +88,7 @@ describe('UsersController', () => {
       const user = { id: '1' };
       service.findOne.mockResolvedValue(user as any);
 
-      const result = await controller.findOne('1');
+      const result = await controller.findOne('1', adminReq);
 
       expect(result).toEqual({ success: true, message: 'User retrieved successfully', data: user });
     });
@@ -92,7 +96,7 @@ describe('UsersController', () => {
     it('debe lanzar NotFoundException si no existe', async () => {
       service.findOne.mockResolvedValue(null);
 
-      await expect(controller.findOne('99')).rejects.toThrow(NotFoundException);
+      await expect(controller.findOne('99', adminReq)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -115,7 +119,7 @@ describe('UsersController', () => {
 
   describe('uploadProfile', () => {
     it('debe lanzar BadRequestException si no se envía archivo', async () => {
-      await expect(controller.uploadProfile('1', undefined as any)).rejects.toThrow(BadRequestException);
+      await expect(controller.uploadProfile('1', undefined as any, adminReq)).rejects.toThrow(BadRequestException);
     });
 
     it('debe actualizar la imagen de perfil correctamente', async () => {
@@ -123,7 +127,7 @@ describe('UsersController', () => {
       const user = { id: '1', profile: 'foto.png' };
       service.updateProfile.mockResolvedValue(user as any);
 
-      const result = await controller.uploadProfile('1', file);
+      const result = await controller.uploadProfile('1', file, adminReq);
 
       expect(service.updateProfile).toHaveBeenCalledWith('1', 'foto.png');
       expect(result).toEqual({ success: true, message: 'Profile image updated', data: user });
@@ -133,7 +137,7 @@ describe('UsersController', () => {
       const file = { filename: 'foto.png' } as Express.Multer.File;
       service.updateProfile.mockResolvedValue(null);
 
-      await expect(controller.uploadProfile('99', file)).rejects.toThrow(NotFoundException);
+      await expect(controller.uploadProfile('99', file, adminReq)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -143,7 +147,7 @@ describe('UsersController', () => {
       const user = { id: '1', ...dto };
       service.update.mockResolvedValue(user as any);
 
-      const result = await controller.update('1', dto as any);
+      const result = await controller.update('1', dto as any, adminReq);
 
       expect(result).toEqual({ success: true, message: 'User updated successfully', data: user });
     });
@@ -151,7 +155,7 @@ describe('UsersController', () => {
     it('debe lanzar NotFoundException si no existe', async () => {
       service.update.mockResolvedValue(null);
 
-      await expect(controller.update('99', {} as any)).rejects.toThrow(NotFoundException);
+      await expect(controller.update('99', {} as any, adminReq)).rejects.toThrow(NotFoundException);
     });
   });
 });

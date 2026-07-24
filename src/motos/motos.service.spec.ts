@@ -16,6 +16,7 @@ describe('MotosService', () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   const queryBuilder: any = {
+    leftJoinAndSelect: jest.fn().mockReturnThis(),
     where: jest.fn().mockReturnThis(),
     orderBy: jest.fn().mockReturnThis(),
   };

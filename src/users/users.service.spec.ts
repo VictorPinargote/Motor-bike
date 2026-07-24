@@ -19,7 +19,7 @@ describe('UsersService', () => {
     apellido: 'Test',
     role: UserRole.USER,
     isActive: true,
-    profile: null,
+    profile: '',
   };
 
   beforeEach(() => {

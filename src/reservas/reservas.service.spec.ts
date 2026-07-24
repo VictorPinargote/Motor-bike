@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { ReservasService } from './reservas.service';
 import { Reserva } from './reserva.entity';
+import { Carrito } from '../carrito/carrito.entity';
 
 describe('ReservasService', () => {
   let service: ReservasService;
@@ -17,6 +18,13 @@ describe('ReservasService', () => {
     createQueryBuilder: jest.fn(),
   };
 
+  const mockCarritoRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+    findOne: jest.fn(),
+    delete: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -24,6 +32,10 @@ describe('ReservasService', () => {
         {
           provide: getRepositoryToken(Reserva),
           useValue: mockRepository,
+        },
+        {
+          provide: getRepositoryToken(Carrito),
+          useValue: mockCarritoRepository,
         },
       ],
     }).compile();
