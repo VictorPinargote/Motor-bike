@@ -17,6 +17,8 @@ import { ComentariosModule } from './comentarios/comentarios.module';
 import { MensajesModule } from './mensajes/mensajes.module';
 import { MantenimientosModule } from './mantenimientos/mantenimientos.module';
 import { NotificacionesModule } from './notificaciones/notificaciones.module';
+import { GarantiasModule } from './garantias/garantias.module';
+import { DescuentosModule } from './descuentos/descuentos.module';
 import { ColoresModule } from './colores/colores.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
 
@@ -59,6 +61,8 @@ import { ProveedoresModule } from './proveedores/proveedores.module';
     MensajesModule,
     MantenimientosModule,
     NotificacionesModule,
+    GarantiasModule,
+    DescuentosModule,
     ColoresModule,
     ProveedoresModule,
   ],
